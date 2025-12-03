@@ -1,0 +1,229 @@
+/**
+ * Tweaker Admin Styles
+ * Minimal, clean WP-native design
+ */
+
+/* Tabs */
+.nt-tabs-wrapper {
+    margin: 20px 0;
+}
+
+.nt-tabs {
+    border-bottom: 1px solid #ccc;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    gap: 5px;
+}
+
+.nt-tab {
+    margin: 0 0 -1px 0;
+}
+
+.nt-tab a {
+    display: block;
+    padding: 10px 15px;
+    text-decoration: none;
+    border: 1px solid transparent;
+    border-radius: 3px 3px 0 0;
+    background: #f0f0f1;
+    color: #2c3338;
+    transition: background 0.2s ease;
+}
+
+.nt-tab a:hover {
+    background: #e8e8e9;
+}
+
+.nt-tab.active a {
+    background: #fff;
+    border-color: #ccc #ccc #fff;
+    color: #1d2327;
+    font-weight: 600;
+}
+
+/* Tab content */
+.nt-tab-content {
+    background: #fff;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+}
+
+/* Cards */
+.nt-card {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+}
+
+.nt-card h2 {
+    margin-top: 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+/* Buttons */
+.nt-button {
+    border-radius: 3px;
+}
+
+.nt-button-primary {
+    background: #2271b1;
+    border-color: #2271b1;
+    color: #fff;
+}
+
+.nt-button-primary:hover {
+    background: #135e96;
+    border-color: #135e96;
+}
+
+/* Form fields */
+.nt-form-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.nt-form-table th {
+    width: 200px;
+    padding: 15px 10px 15px 0;
+    text-align: left;
+    vertical-align: top;
+    font-weight: 600;
+}
+
+.nt-form-table td {
+    padding: 15px 10px;
+}
+
+.nt-form-table tr {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.nt-form-table tr:last-child {
+    border-bottom: none;
+}
+
+/* Field editor specific */
+.nt-field-editor {
+    margin: 20px 0;
+}
+
+.nt-field-row {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 10px;
+}
+
+.nt-field-row:hover {
+    background: #f5f5f5;
+}
+
+.nt-field-label {
+    font-weight: 600;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.nt-field-controls {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.nt-field-control {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.nt-field-control label {
+    font-size: 12px;
+    color: #646970;
+}
+
+.nt-field-control input[type="text"],
+.nt-field-control select {
+    min-width: 200px;
+}
+
+/* Toggle switches */
+.nt-toggle {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+}
+
+.nt-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.nt-toggle-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.3s;
+    border-radius: 24px;
+}
+
+.nt-toggle-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.3s;
+    border-radius: 50%;
+}
+
+.nt-toggle input:checked + .nt-toggle-slider {
+    background-color: #2271b1;
+}
+
+.nt-toggle input:checked + .nt-toggle-slider:before {
+    transform: translateX(20px);
+}
+
+/* Success/Error messages */
+.nt-notice {
+    padding: 12px;
+    margin: 20px 0;
+    border-left: 4px solid;
+    border-radius: 2px;
+}
+
+.nt-notice-success {
+    background: #ecf7ed;
+    border-color: #46b450;
+    color: #1e4620;
+}
+
+.nt-notice-error {
+    background: #f9e5e6;
+    border-color: #d63638;
+    color: #3c1518;
+}
+
+.nt-notice-warning {
+    background: #fcf3e5;
+    border-color: #dba617;
+    color: #5f4d00;
+}

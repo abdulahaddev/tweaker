@@ -1,0 +1,55 @@
+{
+  "id": "checkout-fields",
+  "name": "Checkout Fields",
+  "description": "WooCommerce checkout field customization and validation",
+  "version": "1.0.0",
+  "author": "Naba Tech Ltd",
+  "requires": {
+    "wordpress": "6.9+",
+    "php": "8.1+",
+    "woocommerce": "8.0+"
+  },
+  "dependencies": [],
+  "capabilities": [
+    "nt_manage_checkout_fields"
+  ],
+  "entry_points": {
+    "bootstrap": "CheckoutFields_Module",
+    "admin_menu": {
+      "parent": "tweaker",
+      "slug": "nt-checkout-fields",
+      "title": "Checkout Fields",
+      "capability": "nt_manage_checkout_fields"
+    }
+  },
+  "hooks": {
+    "lazy_load": [
+      "woocommerce_checkout_fields",
+      "woocommerce_checkout_process",
+      "woocommerce_after_checkout_validation"
+    ]
+  },
+  "assets": {
+    "admin": {
+      "js": ["assets/admin.js"],
+      "css": ["assets/admin.css"],
+      "load_on": ["toplevel_page_nt-checkout-fields"]
+    }
+  },
+  "database": {
+    "options": [
+      "nt_checkout_fields_config",
+      "nt_checkout_fields_version"
+    ],
+    "tables": []
+  },
+  "migrations": {
+    "from_plugin": "woocommerce-checkout-field-editor",
+    "old_options": [
+      "wc_checkout_field_editor_settings"
+    ],
+    "scripts": [
+      "migrations/1.0.0.php"
+    ]
+  }
+}
