@@ -79,18 +79,14 @@ class CheckoutFields_Module
         $field_service = new Services\FieldService();
         $validation_service = new Services\ValidationService();
 
-        // Register WooCommerce hooks with very high priority to override other plugins
+        // Modify checkout fields
         add_filter('woocommerce_checkout_fields', [$field_service, 'modify_checkout_fields'], 99999);
         
-        // Also filter billing and shipping fields directly for address placeholders
-        add_filter('woocommerce_billing_fields', [$field_service, 'modify_billing_fields'], 99999);
-        add_filter('woocommerce_shipping_fields', [$field_service, 'modify_shipping_fields'], 99999);
-        
-        // Filter country locale to override address placeholders (WooCommerce sets these via locale)
+        // Override address placeholders (WooCommerce sets these via country locale)
         add_filter('woocommerce_get_country_locale_default', [$field_service, 'modify_locale_defaults'], 99999);
         add_filter('woocommerce_get_country_locale', [$field_service, 'modify_country_locale'], 99999);
         
-        // Filter error messages to use our custom labels
+        // Filter error messages to use custom labels
         add_filter('woocommerce_add_error', [$validation_service, 'customize_error_messages'], 10, 1);
 
         // Admin assets

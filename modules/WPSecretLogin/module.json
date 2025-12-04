@@ -1,0 +1,22 @@
+{
+    "id": "wp-secret-login",
+    "name": "WP Secret Login",
+    "description": "Custom login URL and block wp-login.php and wp-admin for non-logged-in users.",
+    "version": "1.0.0",
+    "author": "Naba Tech Ltd",
+    "license": "GPL-2.0-or-later",
+    "requires": {},
+    "entry_points": {
+        "bootstrap": "WPSecretLogin\\Module"
+    },
+    "assets": {
+        "admin": {
+            "css": [
+                "assets/admin.css"
+            ],
+            "load_on": [
+                "tweaker_page_nt-wp-secret-login"
+            ]
+        }
+    }
+}
