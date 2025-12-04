@@ -1,88 +1,38 @@
 /**
  * CheckoutFields Module - Admin Styles
+ * Uses WordPress native wp-list-table styling
  */
 
-.nt-field-editor {
-    margin-top: 20px;
-}
-
-.nt-field-row {
-    background: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 20px;
-    margin-bottom: 15px;
-    transition: all 0.2s ease;
-}
-
-.nt-field-row:hover {
-    background: #f5f5f5;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.nt-field-label {
-    font-weight: 600;
-    font-size: 15px;
-    margin-bottom: 15px;
-    display: block;
-    color: #1d2327;
-}
-
-.nt-field-controls {
-    display: grid;
-    grid-template-columns: 1fr 1fr auto auto;
-    gap: 20px;
-    align-items: end;
-}
-
-@media (max-width: 1200px) {
-    .nt-field-controls {
-        grid-template-columns: 1fr 1fr;
-    }
-}
-
-@media (max-width: 768px) {
-    .nt-field-controls {
-        grid-template-columns: 1fr;
-    }
-}
-
-.nt-field-control {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.nt-field-control label {
-    font-size: 13px;
-    font-weight: 500;
-    color: #50575e;
-}
-
-.nt-field-control input[type="text"],
-.nt-field-control select {
+/* Table input fields */
+.wp-list-table input[type="text"] {
     width: 100%;
-    min-width: 200px;
+    box-sizing: border-box;
 }
 
-/* Save button */
+/* Compact table padding */
+.wp-list-table td {
+    padding: 12px 10px;
+    vertical-align: middle;
+}
+
+/* Save Button */
 .nt-form .submit {
-    margin-top: 30px;
-    padding-top: 20px;
-    border-top: 1px solid #ddd;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #dcdcde;
 }
 
-/* WooCommerce checkout inline errors */
+/* WooCommerce Checkout - Inline Errors */
 .woocommerce-invalid input,
 .woocommerce-invalid select,
 .woocommerce-invalid textarea {
-    border-color: #e2401c !important;
+    border-color: #d63638 !important;
 }
 
 .nt-field-error {
-    color: #e2401c;
-    font-size: 0.875em;
+    color: #d63638;
+    font-size: 12px;
     display: block;
-    margin-top: 5px;
+    margin-top: 4px;
     font-weight: 500;
 }

@@ -33,7 +33,7 @@
     "admin": {
       "js": ["assets/admin.js"],
       "css": ["assets/admin.css"],
-      "load_on": ["toplevel_page_nt-checkout-fields"]
+      "load_on": ["tweaker_page_nt-checkout-fields", "toplevel_page_nt-checkout-fields"]
     }
   },
   "database": {

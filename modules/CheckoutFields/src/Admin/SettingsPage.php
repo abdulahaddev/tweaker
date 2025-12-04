@@ -103,13 +103,30 @@ class SettingsPage
             return;
         }
 
-        echo '<div class="nt-field-editor">';
+        // Sort fields by priority
+        uasort($fields, function ($a, $b) {
+            return ($a['priority'] ?? 10) <=> ($b['priority'] ?? 10);
+        });
 
-        foreach ($fields as $field_key => $field_config) {
-            $this->render_field_row($group_key, $field_key, $field_config);
-        }
-
-        echo '</div>';
+        ?>
+        <table class="wp-list-table widefat fixed striped">
+            <thead>
+                <tr>
+                    <th style="width: 15%;"><?php esc_html_e('Field', 'tweaker'); ?></th>
+                    <th style="width: 20%;"><?php esc_html_e('Label', 'tweaker'); ?></th>
+                    <th style="width: 20%;"><?php esc_html_e('Placeholder', 'tweaker'); ?></th>
+                    <th style="width: 25%;"><?php esc_html_e('Validation Message', 'tweaker'); ?></th>
+                    <th style="width: 10%;"><?php esc_html_e('Required', 'tweaker'); ?></th>
+                    <th style="width: 10%;"><?php esc_html_e('Enabled', 'tweaker'); ?></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($fields as $field_key => $field_config) : ?>
+                    <?php $this->render_field_row($group_key, $field_key, $field_config); ?>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+        <?php
     }
 
     /**
@@ -122,78 +139,33 @@ class SettingsPage
     private function render_field_row(string $group_key, string $field_key, array $field_config): void
     {
         $field_name = $group_key . '[' . $field_key . ']';
+        $display_name = ucwords(str_replace(['_', 'billing ', 'shipping ', 'order '], [' ', '', '', ''], $field_key));
         ?>
-        <div class="nt-field-row">
-            <div class="nt-field-label">
-                <?php echo esc_html(ucwords(str_replace(['_', 'billing ', 'shipping ', 'order '], [' ', '', '', ''], $field_key))); ?>
-            </div>
-
-            <div class="nt-field-controls">
-                <div class="nt-field-control">
-                    <label><?php esc_html_e('Label', 'tweaker'); ?></label>
-                    <input
-                        type="text"
-                        name="<?php echo esc_attr($field_name); ?>[label]"
-                        value="<?php echo esc_attr($field_config['label'] ?? ''); ?>"
-                        class="regular-text"
-                    />
-                </div>
-
-                <div class="nt-field-control">
-                    <label><?php esc_html_e('Placeholder', 'tweaker'); ?></label>
-                    <input
-                        type="text"
-                        name="<?php echo esc_attr($field_name); ?>[placeholder]"
-                        value="<?php echo esc_attr($field_config['placeholder'] ?? ''); ?>"
-                        class="regular-text"
-                    />
-                </div>
-
-                <div class="nt-field-control">
-                    <label><?php esc_html_e('Validation Message', 'tweaker'); ?></label>
-                    <input
-                        type="text"
-                        name="<?php echo esc_attr($field_name); ?>[validation_message]"
-                        value="<?php echo esc_attr($field_config['validation_message'] ?? ''); ?>"
-                        class="regular-text"
-                        placeholder="e.g., Please enter your name"
-                    />
-                    <p class="description"><?php esc_html_e('Custom error message when field is empty (leave blank for default)', 'tweaker'); ?></p>
-                </div>
-
-                <div class="nt-field-control">
-                    <label><?php esc_html_e('Required', 'tweaker'); ?></label>
-                    <label class="nt-toggle">
-                        <input
-                            type="checkbox"
-                            name="<?php echo esc_attr($field_name); ?>[required]"
-                            value="1"
-                            <?php checked($field_config['required'] ?? false, true); ?>
-                        />
-                        <span class="nt-toggle-slider"></span>
-                    </label>
-                </div>
-
-                <div class="nt-field-control">
-                    <label><?php esc_html_e('Enabled', 'tweaker'); ?></label>
-                    <label class="nt-toggle">
-                        <input
-                            type="checkbox"
-                            name="<?php echo esc_attr($field_name); ?>[enabled]"
-                            value="1"
-                            <?php checked($field_config['enabled'] ?? true, true); ?>
-                        />
-                        <span class="nt-toggle-slider"></span>
-                    </label>
-                </div>
-
-                <input
-                    type="hidden"
-                    name="<?php echo esc_attr($field_name); ?>[priority]"
-                    value="<?php echo esc_attr($field_config['priority'] ?? 10); ?>"
-                />
-            </div>
-        </div>
+        <tr>
+            <td><strong><?php echo esc_html($display_name); ?></strong></td>
+            <td>
+                <input type="text" name="<?php echo esc_attr($field_name); ?>[label]" value="<?php echo esc_attr($field_config['label'] ?? ''); ?>" class="regular-text" style="width: 100%;" />
+            </td>
+            <td>
+                <input type="text" name="<?php echo esc_attr($field_name); ?>[placeholder]" value="<?php echo esc_attr($field_config['placeholder'] ?? ''); ?>" class="regular-text" style="width: 100%;" />
+            </td>
+            <td>
+                <input type="text" name="<?php echo esc_attr($field_name); ?>[validation_message]" value="<?php echo esc_attr($field_config['validation_message'] ?? ''); ?>" placeholder="<?php esc_attr_e('(leave blank for default)', 'tweaker'); ?>" class="regular-text" style="width: 100%;" />
+            </td>
+            <td style="text-align: center;">
+                <label class="nt-toggle">
+                    <input type="checkbox" name="<?php echo esc_attr($field_name); ?>[required]" value="1" <?php checked($field_config['required'] ?? false, true); ?> />
+                    <span class="nt-toggle-slider"></span>
+                </label>
+            </td>
+            <td style="text-align: center;">
+                <label class="nt-toggle">
+                    <input type="checkbox" name="<?php echo esc_attr($field_name); ?>[enabled]" value="1" <?php checked($field_config['enabled'] ?? true, true); ?> />
+                    <span class="nt-toggle-slider"></span>
+                </label>
+            </td>
+            <input type="hidden" name="<?php echo esc_attr($field_name); ?>[priority]" value="<?php echo esc_attr($field_config['priority'] ?? 10); ?>" />
+        </tr>
         <?php
     }
 

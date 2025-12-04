@@ -82,6 +82,14 @@ class CheckoutFields_Module
         // Register WooCommerce hooks with very high priority to override other plugins
         add_filter('woocommerce_checkout_fields', [$field_service, 'modify_checkout_fields'], 99999);
         
+        // Also filter billing and shipping fields directly for address placeholders
+        add_filter('woocommerce_billing_fields', [$field_service, 'modify_billing_fields'], 99999);
+        add_filter('woocommerce_shipping_fields', [$field_service, 'modify_shipping_fields'], 99999);
+        
+        // Filter country locale to override address placeholders (WooCommerce sets these via locale)
+        add_filter('woocommerce_get_country_locale_default', [$field_service, 'modify_locale_defaults'], 99999);
+        add_filter('woocommerce_get_country_locale', [$field_service, 'modify_country_locale'], 99999);
+        
         // Filter error messages to use our custom labels
         add_filter('woocommerce_add_error', [$validation_service, 'customize_error_messages'], 10, 1);
 
@@ -194,25 +202,67 @@ class CheckoutFields_Module
         return [
             'billing_fields' => [
                 'billing_first_name' => [
-                    'label' => 'Name',
-                    'placeholder' => 'Enter your full name',
+                    'label' => 'First Name',
+                    'placeholder' => 'Enter your first name',
                     'required' => true,
                     'enabled' => true,
                     'priority' => 10,
                 ],
+                'billing_last_name' => [
+                    'label' => 'Last Name',
+                    'placeholder' => 'Enter your last name',
+                    'required' => true,
+                    'enabled' => true,
+                    'priority' => 20,
+                ],
+                'billing_company' => [
+                    'label' => 'Company',
+                    'placeholder' => 'Company name (optional)',
+                    'required' => false,
+                    'enabled' => true,
+                    'priority' => 30,
+                ],
+                'billing_country' => [
+                    'label' => 'Country',
+                    'placeholder' => 'Select your country',
+                    'required' => true,
+                    'enabled' => true,
+                    'priority' => 40,
+                ],
                 'billing_address_1' => [
-                    'label' => 'Address',
-                    'placeholder' => 'Enter your address',
+                    'label' => 'Address Line 1',
+                    'placeholder' => 'Street address',
                     'required' => true,
                     'enabled' => true,
                     'priority' => 50,
                 ],
+                'billing_address_2' => [
+                    'label' => 'Address Line 2',
+                    'placeholder' => 'Apartment, suite, unit, etc. (optional)',
+                    'required' => false,
+                    'enabled' => true,
+                    'priority' => 60,
+                ],
+                'billing_city' => [
+                    'label' => 'City',
+                    'placeholder' => 'Enter your city',
+                    'required' => true,
+                    'enabled' => true,
+                    'priority' => 70,
+                ],
                 'billing_state' => [
-                    'label' => 'State',
+                    'label' => 'State / Province',
                     'placeholder' => 'Select your state',
                     'required' => true,
                     'enabled' => true,
                     'priority' => 80,
+                ],
+                'billing_postcode' => [
+                    'label' => 'Postcode / ZIP',
+                    'placeholder' => 'Enter your postcode',
+                    'required' => true,
+                    'enabled' => true,
+                    'priority' => 90,
                 ],
                 'billing_phone' => [
                     'label' => 'Phone',
@@ -223,13 +273,77 @@ class CheckoutFields_Module
                 ],
                 'billing_email' => [
                     'label' => 'Email',
-                    'placeholder' => 'Enter your email',
+                    'placeholder' => 'Enter your email address',
                     'required' => true,
                     'enabled' => true,
                     'priority' => 110,
                 ],
             ],
-            'shipping_fields' => [],
+            'shipping_fields' => [
+                'shipping_first_name' => [
+                    'label' => 'First Name',
+                    'placeholder' => 'Enter your first name',
+                    'required' => true,
+                    'enabled' => true,
+                    'priority' => 10,
+                ],
+                'shipping_last_name' => [
+                    'label' => 'Last Name',
+                    'placeholder' => 'Enter your last name',
+                    'required' => true,
+                    'enabled' => true,
+                    'priority' => 20,
+                ],
+                'shipping_company' => [
+                    'label' => 'Company',
+                    'placeholder' => 'Company name (optional)',
+                    'required' => false,
+                    'enabled' => true,
+                    'priority' => 30,
+                ],
+                'shipping_country' => [
+                    'label' => 'Country',
+                    'placeholder' => 'Select your country',
+                    'required' => true,
+                    'enabled' => true,
+                    'priority' => 40,
+                ],
+                'shipping_address_1' => [
+                    'label' => 'Address Line 1',
+                    'placeholder' => 'Street address',
+                    'required' => true,
+                    'enabled' => true,
+                    'priority' => 50,
+                ],
+                'shipping_address_2' => [
+                    'label' => 'Address Line 2',
+                    'placeholder' => 'Apartment, suite, unit, etc. (optional)',
+                    'required' => false,
+                    'enabled' => true,
+                    'priority' => 60,
+                ],
+                'shipping_city' => [
+                    'label' => 'City',
+                    'placeholder' => 'Enter your city',
+                    'required' => true,
+                    'enabled' => true,
+                    'priority' => 70,
+                ],
+                'shipping_state' => [
+                    'label' => 'State / Province',
+                    'placeholder' => 'Select your state',
+                    'required' => true,
+                    'enabled' => true,
+                    'priority' => 80,
+                ],
+                'shipping_postcode' => [
+                    'label' => 'Postcode / ZIP',
+                    'placeholder' => 'Enter your postcode',
+                    'required' => true,
+                    'enabled' => true,
+                    'priority' => 90,
+                ],
+            ],
             'order_fields' => [
                 'order_comments' => [
                     'label' => 'Order Comments',
@@ -247,7 +361,23 @@ class CheckoutFields_Module
      */
     private function get_current_config(): array
     {
-        $config = get_option('nt_checkout_fields_config', []);
-        return wp_parse_args($config, $this->get_default_config());
+        $saved_config = get_option('nt_checkout_fields_config', []);
+        $default_config = $this->get_default_config();
+        
+        // Deep merge: add any new default fields that don't exist in saved config
+        foreach ($default_config as $group_key => $fields) {
+            if (!isset($saved_config[$group_key])) {
+                $saved_config[$group_key] = $fields;
+            } else {
+                // Merge individual fields
+                foreach ($fields as $field_key => $field_config) {
+                    if (!isset($saved_config[$group_key][$field_key])) {
+                        $saved_config[$group_key][$field_key] = $field_config;
+                    }
+                }
+            }
+        }
+        
+        return $saved_config;
     }
 }
