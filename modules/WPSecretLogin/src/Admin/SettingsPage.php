@@ -28,22 +28,7 @@ class SettingsPage {
      * Initialize
      */
     public function init(): void {
-        add_action('admin_menu', [$this, 'add_menu_page']);
         add_action('admin_init', [$this, 'register_settings']);
-    }
-
-    /**
-     * Add menu page
-     */
-    public function add_menu_page(): void {
-        add_submenu_page(
-            'tweaker', // Parent slug
-            __('Secret Login', 'tweaker'),
-            __('Secret Login', 'tweaker'),
-            'manage_options',
-            'nt-wp-secret-login',
-            [$this, 'render_page']
-        );
     }
 
     /**

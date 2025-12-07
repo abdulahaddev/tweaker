@@ -36,3 +36,43 @@
     margin-top: 4px;
     font-weight: 500;
 }
+
+/* Toggle Status Labels */
+.nt-status-active {
+    color: green;
+    margin-left: 10px;
+}
+
+.nt-status-inactive {
+    color: #999;
+    margin-left: 10px;
+}
+
+/* Disabled Section Container */
+.nt-disabled {
+    opacity: 0.5;
+    pointer-events: none;
+    filter: grayscale(100%);
+    transition: all 0.3s ease;
+}
+
+/* Disabled Individual Field Row */
+.nt-field-disabled {
+    opacity: 0.5;
+    filter: grayscale(100%);
+    transition: all 0.3s ease;
+}
+
+/* Keep the enabled toggle clickable in disabled rows */
+.nt-field-disabled td:last-child {
+    opacity: 1;
+    filter: none;
+}
+
+/* Prevent interaction with disabled fields but allow toggle */
+.nt-field-disabled input:not([name*="[enabled]"]),
+.nt-field-disabled select,
+.nt-field-disabled textarea {
+    pointer-events: none;
+    cursor: not-allowed;
+}

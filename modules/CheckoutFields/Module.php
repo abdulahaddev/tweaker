@@ -111,9 +111,6 @@ class CheckoutFields_Module
      */
     public function activate(): void
     {
-        // Run migration if needed
-        $this->run_migrations();
-
         nt_log('CheckoutFields module activated');
     }
 
@@ -133,24 +130,8 @@ class CheckoutFields_Module
         // Remove all module options
         delete_option('nt_checkout_fields_config');
         delete_option('nt_checkout_fields_version');
-        delete_option('_nt_checkout_fields_old_backup');
 
         nt_log('CheckoutFields module uninstalled');
-    }
-
-    /**
-     * Run migration scripts
-     */
-    private function run_migrations(): void
-    {
-        $current_version = get_option('nt_checkout_fields_version', '0.0.0');
-
-        foreach ($this->manifest['migrations']['scripts'] as $script) {
-            $script_path = $this->module_dir . $script;
-            if (file_exists($script_path)) {
-                require_once $script_path;
-            }
-        }
     }
 
     /**

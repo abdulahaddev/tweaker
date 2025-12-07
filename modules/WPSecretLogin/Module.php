@@ -100,4 +100,12 @@ class Module {
         // Cleanup options
         delete_option('nt_wp_secret_login_settings');
     }
+    
+    /**
+     * Render admin page (for Tweaker integration)
+     */
+    public function render_admin_page(): void {
+        $settings_page = new SettingsPage();
+        $settings_page->render_page();
+    }
 }

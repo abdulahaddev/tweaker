@@ -31,9 +31,16 @@
   },
   "assets": {
     "admin": {
-      "js": ["assets/admin.js"],
-      "css": ["assets/admin.css"],
-      "load_on": ["tweaker_page_nt-checkout-fields", "toplevel_page_nt-checkout-fields"]
+      "js": [
+        "assets/admin.js"
+      ],
+      "css": [
+        "assets/admin.css"
+      ],
+      "load_on": [
+        "tweaker_page_nt-checkout-fields",
+        "toplevel_page_nt-checkout-fields"
+      ]
     }
   },
   "database": {
@@ -42,14 +49,5 @@
       "nt_checkout_fields_version"
     ],
     "tables": []
-  },
-  "migrations": {
-    "from_plugin": "woocommerce-checkout-field-editor",
-    "old_options": [
-      "wc_checkout_field_editor_settings"
-    ],
-    "scripts": [
-      "migrations/1.0.0.php"
-    ]
   }
 }

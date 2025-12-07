@@ -122,5 +122,20 @@ function nt_deactivate() {
 register_deactivation_hook(__FILE__, __NAMESPACE__ . '\nt_deactivate');
 
 /**
+ * Add Settings link to plugins page
+ */
+function nt_plugin_action_links($links) {
+    $settings_link = sprintf(
+        '<a href="%s">%s</a>',
+        admin_url('admin.php?page=tweaker'),
+        __('Settings', 'tweaker')
+    );
+    
+    array_unshift($links, $settings_link);
+    return $links;
+}
+add_filter('plugin_action_links_' . plugin_basename(__FILE__), __NAMESPACE__ . '\nt_plugin_action_links');
+
+/**
  * Uninstall handling - see uninstall.php
  */

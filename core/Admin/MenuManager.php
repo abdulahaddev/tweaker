@@ -263,6 +263,7 @@ class MenuManager
         $action = sanitize_text_field($_POST['nt_module_action']);
         
         $enabled_modules = get_option('nt_enabled_modules', []);
+        $redirect_url = admin_url('admin.php?page=tweaker'); // Default redirect
         
         if ($action === 'enable') {
             // Check dependencies before enabling
@@ -275,8 +276,14 @@ class MenuManager
                     // Store success notice in transient
                     set_transient('nt_module_notice', [
                         'type' => 'success',
-                        'message' => sprintf(__('Module "%s" has been enabled.', 'tweaker'), $module_id)
+                        'message' => sprintf(__('Module "%s" has been enabled.', 'tweaker'), $all_modules[$module_id]['name'])
                     ], 30);
+                    
+                    // Redirect to module's settings page if it has one
+                    $entry = $all_modules[$module_id]['entry_points']['admin_menu'] ?? null;
+                    if ($entry && isset($entry['slug'])) {
+                        $redirect_url = admin_url('admin.php?page=' . $entry['slug']);
+                    }
                 }
             } else {
                 // Store error notice in transient
@@ -289,15 +296,19 @@ class MenuManager
             $enabled_modules = array_diff($enabled_modules, [$module_id]);
             update_option('nt_enabled_modules', array_values($enabled_modules));
             
+            // Get module name for better message
+            $all_modules = $this->get_all_modules();
+            $module_name = $all_modules[$module_id]['name'] ?? $module_id;
+            
             // Store success notice in transient
             set_transient('nt_module_notice', [
                 'type' => 'success',
-                'message' => sprintf(__('Module "%s" has been disabled.', 'tweaker'), $module_id)
+                'message' => sprintf(__('Module "%s" has been disabled.', 'tweaker'), $module_name)
             ], 30);
         }
         
-        // Redirect to refresh menu immediately
-        wp_redirect(admin_url('admin.php?page=tweaker'));
+        // Redirect
+        wp_redirect($redirect_url);
         exit;
     }
 
@@ -307,21 +318,72 @@ class MenuManager
      */
     public function render_settings_page(): void
     {
+        // Handle settings save
+        if (isset($_POST['nt_save_settings']) && check_admin_referer('nt_settings_save')) {
+            $delete_on_uninstall = isset($_POST['nt_delete_on_uninstall']) ? 1 : 0;
+            update_option('nt_delete_data_on_uninstall', $delete_on_uninstall);
+            
+            echo '<div class="notice notice-success is-dismissible"><p>';
+            esc_html_e('Settings saved successfully!', 'tweaker');
+            echo '</p></div>';
+        }
+        
+        $delete_on_uninstall = get_option('nt_delete_data_on_uninstall', 0);
         ?>
         <div class="wrap">
             <h1><?php esc_html_e('Tweaker Settings', 'tweaker'); ?></h1>
             <p><?php esc_html_e('Global settings for the Tweaker plugin system.', 'tweaker'); ?></p>
 
-            <div class="nt-card">
-                <h2><?php esc_html_e('Debug Mode', 'tweaker'); ?></h2>
-                <p>
-                    <?php if (defined('WP_DEBUG') && WP_DEBUG) : ?>
-                        <span style="color: orange;">⚠️ Debug mode is currently <strong>ENABLED</strong></span>
-                    <?php else : ?>
-                        <span style="color: green;">✓ Debug mode is currently <strong>DISABLED</strong></span>
-                    <?php endif; ?>
+            <form method="post" action="">
+                <?php wp_nonce_field('nt_settings_save'); ?>
+                <input type="hidden" name="nt_save_settings" value="1" />
+                
+                <div class="nt-card">
+                    <h2><?php esc_html_e('Uninstall Settings', 'tweaker'); ?></h2>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><?php esc_html_e('Remove All Data on Uninstall', 'tweaker'); ?></th>
+                            <td>
+                                <label class="nt-toggle">
+                                    <input type="checkbox" name="nt_delete_on_uninstall" value="1" <?php checked($delete_on_uninstall, 1); ?> />
+                                    <span class="nt-toggle-slider"></span>
+                                </label>
+                                <p class="description">
+                                    <?php esc_html_e('When enabled, all plugin data (settings, modules, database tables) will be permanently deleted when you uninstall this plugin. Leave disabled to keep your data for future use.', 'tweaker'); ?>
+                                </p>
+                                <p class="description" style="color: #d63638; font-weight: 500;">
+                                    ⚠️ <?php esc_html_e('Warning: This action cannot be undone. All module configurations will be lost.', 'tweaker'); ?>
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="nt-card">
+                    <h2><?php esc_html_e('Debug Information', 'tweaker'); ?></h2>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><?php esc_html_e('Debug Mode', 'tweaker'); ?></th>
+                            <td>
+                                <?php if (defined('WP_DEBUG') && WP_DEBUG) : ?>
+                                    <span style="color: orange;">⚠️ <?php esc_html_e('Debug mode is currently', 'tweaker'); ?> <strong><?php esc_html_e('ENABLED', 'tweaker'); ?></strong></span>
+                                <?php else : ?>
+                                    <span style="color: green;">✓ <?php esc_html_e('Debug mode is currently', 'tweaker'); ?> <strong><?php esc_html_e('DISABLED', 'tweaker'); ?></strong></span>
+                                <?php endif; ?>
+                                <p class="description">
+                                    <?php esc_html_e('Debug mode is controlled via wp-config.php (WP_DEBUG constant).', 'tweaker'); ?>
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <p class="submit">
+                    <button type="submit" name="nt_save_settings" class="button button-primary">
+                        <?php esc_html_e('Save Settings', 'tweaker'); ?>
+                    </button>
                 </p>
-            </div>
+            </form>
         </div>
         <?php
     }

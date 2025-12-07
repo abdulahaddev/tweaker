@@ -146,43 +146,39 @@ class SettingsPage
             </label>
             
             <?php if ($is_active) : ?>
-                <span style="color: green; margin-left: 10px;">Active</span>
+                <span class="nt-status-active">Active</span>
             <?php else : ?>
-                <span style="color: #999; margin-left: 10px;">Inactive</span>
+                <span class="nt-status-inactive">Inactive</span>
             <?php endif; ?>
         </div>
-
-        <style>
-            .nt-disabled { opacity: 0.5; pointer-events: none; filter: grayscale(100%); transition: all 0.3s ease; }
-        </style>
         
         <script>
             jQuery(document).ready(function($) {
                 var $container = $('.nt-field-table-<?php echo esc_attr($group_key); ?>');
                 var $toggle = $('input[name="<?php echo esc_attr($form_key); ?>"]');
-                var $labelContainer = $toggle.parent().parent(); // Get the div container
+                var $labelContainer = $toggle.parent().parent();
                 
                 function updateState() {
                     var checked = $toggle.is(':checked');
                     $container.toggleClass('nt-disabled', !checked);
                     $container.find('input, select, textarea').prop('readonly', !checked);
                     
-                    // Update label text and color
                     var $statusSpan = $labelContainer.find('span:not(.nt-toggle-slider)');
                     if (checked) {
-                        $statusSpan.text('Active').css('color', 'green');
+                        $statusSpan.text('Active')
+                            .removeClass('nt-status-inactive')
+                            .addClass('nt-status-active');
                     } else {
-                        $statusSpan.text('Inactive').css('color', '#999');
+                        $statusSpan.text('Inactive')
+                            .removeClass('nt-status-active')
+                            .addClass('nt-status-inactive');
                     }
                 }
                 
-                // Initial state
                 updateState();
                 
-                // On change
                 $toggle.change(function() {
                     updateState();
-                    // Auto-save settings when toggled
                     $(this).closest('form').submit();
                 });
             });
