@@ -320,8 +320,13 @@ class MenuManager
     {
         // Handle settings save
         if (isset($_POST['nt_save_settings']) && check_admin_referer('nt_settings_save')) {
+            // Save Uninstall Settings
             $delete_on_uninstall = isset($_POST['nt_delete_on_uninstall']) ? 1 : 0;
             update_option('nt_delete_data_on_uninstall', $delete_on_uninstall);
+            
+            // Save Checkout Page Settings
+            $hide_shipping_section = isset($_POST['nt_hide_shipping_section']) ? 1 : 0;
+            update_option('nt_hide_shipping_section', $hide_shipping_section);
             
             echo '<div class="notice notice-success is-dismissible"><p>';
             esc_html_e('Settings saved successfully!', 'tweaker');
@@ -329,6 +334,7 @@ class MenuManager
         }
         
         $delete_on_uninstall = get_option('nt_delete_data_on_uninstall', 0);
+        $hide_shipping_section = get_option('nt_hide_shipping_section', 0);
         ?>
         <div class="wrap">
             <h1><?php esc_html_e('Tweaker Settings', 'tweaker'); ?></h1>
@@ -337,6 +343,25 @@ class MenuManager
             <form method="post" action="">
                 <?php wp_nonce_field('nt_settings_save'); ?>
                 <input type="hidden" name="nt_save_settings" value="1" />
+                
+                <!-- Checkout Page Settings Section -->
+                <div class="nt-card">
+                    <h2><?php esc_html_e('Checkout Page Settings', 'tweaker'); ?></h2>
+                    <table class="form-table">
+                        <tr>
+                            <th scope="row"><?php esc_html_e('Hide Shipping Section', 'tweaker'); ?></th>
+                            <td>
+                                <label class="nt-toggle">
+                                    <input type="checkbox" name="nt_hide_shipping_section" value="1" <?php checked($hide_shipping_section, 1); ?> />
+                                    <span class="nt-toggle-slider"></span>
+                                </label>
+                                <p class="description">
+                                    <?php esc_html_e('When enabled, the shipping address section will be completely hidden on the WooCommerce checkout page. Useful for digital products or services that don\'t require shipping.', 'tweaker'); ?>
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
                 
                 <div class="nt-card">
                     <h2><?php esc_html_e('Uninstall Settings', 'tweaker'); ?></h2>

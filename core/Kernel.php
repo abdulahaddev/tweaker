@@ -79,9 +79,54 @@ class Kernel
 
         // Hook to auto-disable modules when dependencies are deactivated
         add_action('deactivated_plugin', [$this, 'check_module_dependencies']);
+        
+        // Add global hooks for checkout page settings
+        $this->register_checkout_hooks();
 
         // Fire kernel initialization hook
         do_action('nt_kernel_initialized', $this);
+    }
+    
+    /**
+     * Register checkout page hooks
+     */
+    private function register_checkout_hooks(): void
+    {
+        // Only register if WooCommerce is active
+        if (!class_exists('WooCommerce')) {
+            return;
+        }
+        
+        // Hide shipping section if setting is enabled
+        if (get_option('nt_hide_shipping_section', 0) == 1) {
+            add_filter('woocommerce_checkout_fields', [$this, 'hide_shipping_fields'], 99999);
+            add_filter('woocommerce_ship_to_different_address_checked', '__return_false');
+            add_action('woocommerce_after_checkout_billing_form', [$this, 'hide_shipping_option'], 10);
+        }
+    }
+    
+    /**
+     * Hide "Ship to different address" option via CSS
+     */
+    public function hide_shipping_option(): void
+    {
+        echo '<style>.woocommerce-shipping-fields { display: none !important; }</style>';
+    }
+    
+    /**
+     * Hide shipping fields from checkout
+     *
+     * @param array $fields Checkout fields
+     * @return array Modified checkout fields
+     */
+    public function hide_shipping_fields(array $fields): array
+    {
+        // Remove the entire shipping fields array
+        if (isset($fields['shipping'])) {
+            unset($fields['shipping']);
+        }
+        
+        return $fields;
     }
 
     /**
