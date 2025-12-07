@@ -41,6 +41,22 @@ class Autoloader
     /**
      * Load class file
      *
+     * IMPORTANT - WordPress Naming Convention:
+     * =========================================
+     * WordPress uses lowercase folder names (e.g., 'core/', 'modules/') for consistency
+     * with plugin slugs and Linux filesystem conventions. However, PHP namespaces use
+     * PascalCase (e.g., 'Core', 'Modules') per PSR standards.
+     * 
+     * This autoloader bridges the gap by converting the first directory component to
+     * lowercase when mapping namespaces to file paths.
+     * 
+     * Example Mapping:
+     * - Namespace: NabaTech\Tweaker\Core\Kernel
+     * - File Path: core/Kernel.php (NOT Core/Kernel.php)
+     * 
+     * This works on both Windows (case-insensitive) and Linux (case-sensitive).
+     * DO NOT change this logic without understanding the WordPress conventions!
+     *
      * @param string $class Fully qualified class name
      */
     public function load_class(string $class): void
@@ -54,7 +70,17 @@ class Autoloader
         $relative_class = substr($class, strlen(self::BASE_NAMESPACE));
 
         // Convert namespace to file path
-        $file = $this->base_dir . str_replace('\\', '/', $relative_class) . '.php';
+        $path_parts = explode('\\', $relative_class);
+        
+        // CRITICAL: Convert first part (Core/Modules) to lowercase for WordPress compatibility
+        // This ensures 'Core\Admin\MenuManager' maps to 'core/Admin/MenuManager.php'
+        // Folders are lowercase, but subdirectories/files maintain their case
+        if (!empty($path_parts[0])) {
+            $path_parts[0] = strtolower($path_parts[0]);
+        }
+        
+        $relative_path = implode('/', $path_parts);
+        $file = $this->base_dir . $relative_path . '.php';
 
         // Load file if it exists
         if (file_exists($file)) {

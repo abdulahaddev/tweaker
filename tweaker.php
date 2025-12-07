@@ -23,8 +23,15 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+// ============================================================================
+// IMPORTANT: All folder names MUST be lowercase for Linux compatibility!
+// Folders: core/, modules/ (lowercase)
+// Namespaces: Core, Modules (PascalCase)
+// See core/Autoloader.php for details on how this mapping works.
+// ============================================================================
+
 // Plugin constants
-require_once __DIR__ . '/Core/Constants.php';
+require_once __DIR__ . '/core/Constants.php';
 
 /**
  * Check minimum requirements
@@ -68,12 +75,12 @@ function nt_check_requirements() {
 /**
  * Load logger first (needed by other core files)
  */
-require_once NT_PLUGIN_DIR . 'Core/Logger.php';
+require_once NT_PLUGIN_DIR . 'core/Logger.php';
 
 /**
  * Autoloader for Tweaker classes
  */
-require_once NT_PLUGIN_DIR . 'Core/Autoloader.php';
+require_once NT_PLUGIN_DIR . 'core/Autoloader.php';
 $nt_autoloader = new \NabaTech\Tweaker\Core\Autoloader();
 $nt_autoloader->register();
 
