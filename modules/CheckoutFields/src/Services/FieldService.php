@@ -22,15 +22,18 @@ class FieldService
     {
         $config = get_option('nt_checkout_fields_config', []);
 
-        if (!empty($config['billing_fields'])) {
+        // Billing
+        if (!empty($config['billing_fields']) && ($config['billing_active'] ?? true)) {
             $fields['billing'] = $this->apply_field_config($fields['billing'] ?? [], $config['billing_fields']);
         }
 
-        if (!empty($config['shipping_fields'])) {
+        // Shipping
+        if (!empty($config['shipping_fields']) && ($config['shipping_active'] ?? true)) {
             $fields['shipping'] = $this->apply_field_config($fields['shipping'] ?? [], $config['shipping_fields']);
         }
 
-        if (!empty($config['order_fields'])) {
+        // Order
+        if (!empty($config['order_fields']) && ($config['order_active'] ?? true)) {
             $fields['order'] = $this->apply_field_config($fields['order'] ?? [], $config['order_fields']);
         }
 
@@ -86,12 +89,40 @@ class FieldService
     {
         $config = get_option('nt_checkout_fields_config', []);
         
+        if (!($config['billing_active'] ?? true)) {
+            return $locale;
+        }
+        
+        // Override address_1 label and placeholder
+        if (!empty($config['billing_fields']['billing_address_1']['label'])) {
+            $locale['address_1']['label'] = $config['billing_fields']['billing_address_1']['label'];
+        }
+        
         if (!empty($config['billing_fields']['billing_address_1']['placeholder'])) {
             $locale['address_1']['placeholder'] = $config['billing_fields']['billing_address_1']['placeholder'];
         }
         
+        // Override address_2 placeholder
         if (!empty($config['billing_fields']['billing_address_2']['placeholder'])) {
             $locale['address_2']['placeholder'] = $config['billing_fields']['billing_address_2']['placeholder'];
+        }
+        
+        // Override city label and placeholder
+        if (!empty($config['billing_fields']['billing_city']['label'])) {
+            $locale['city']['label'] = $config['billing_fields']['billing_city']['label'];
+        }
+        
+        if (!empty($config['billing_fields']['billing_city']['placeholder'])) {
+            $locale['city']['placeholder'] = $config['billing_fields']['billing_city']['placeholder'];
+        }
+        
+        // Override state label and placeholder
+        if (!empty($config['billing_fields']['billing_state']['label'])) {
+            $locale['state']['label'] = $config['billing_fields']['billing_state']['label'];
+        }
+        
+        if (!empty($config['billing_fields']['billing_state']['placeholder'])) {
+            $locale['state']['placeholder'] = $config['billing_fields']['billing_state']['placeholder'];
         }
         
         return $locale;
@@ -107,15 +138,49 @@ class FieldService
     {
         $config = get_option('nt_checkout_fields_config', []);
         
+        if (!($config['billing_active'] ?? true)) {
+            return $locale;
+        }
+        
+        $address_1_label = $config['billing_fields']['billing_address_1']['label'] ?? '';
         $address_1_placeholder = $config['billing_fields']['billing_address_1']['placeholder'] ?? '';
         $address_2_placeholder = $config['billing_fields']['billing_address_2']['placeholder'] ?? '';
+        $city_label = $config['billing_fields']['billing_city']['label'] ?? '';
+        $city_placeholder = $config['billing_fields']['billing_city']['placeholder'] ?? '';
+        $state_label = $config['billing_fields']['billing_state']['label'] ?? '';
+        $state_placeholder = $config['billing_fields']['billing_state']['placeholder'] ?? '';
         
         foreach ($locale as $country_code => $country_locale) {
+            // Override address_1 label and placeholder
+            if (!empty($address_1_label) && isset($locale[$country_code]['address_1'])) {
+                $locale[$country_code]['address_1']['label'] = $address_1_label;
+            }
+            
             if (!empty($address_1_placeholder) && isset($locale[$country_code]['address_1'])) {
                 $locale[$country_code]['address_1']['placeholder'] = $address_1_placeholder;
             }
+            
+            // Override address_2 placeholder
             if (!empty($address_2_placeholder) && isset($locale[$country_code]['address_2'])) {
                 $locale[$country_code]['address_2']['placeholder'] = $address_2_placeholder;
+            }
+            
+            // Override city label and placeholder
+            if (!empty($city_label) && isset($locale[$country_code]['city'])) {
+                $locale[$country_code]['city']['label'] = $city_label;
+            }
+            
+            if (!empty($city_placeholder) && isset($locale[$country_code]['city'])) {
+                $locale[$country_code]['city']['placeholder'] = $city_placeholder;
+            }
+            
+            // Override state label and placeholder
+            if (!empty($state_label) && isset($locale[$country_code]['state'])) {
+                $locale[$country_code]['state']['label'] = $state_label;
+            }
+            
+            if (!empty($state_placeholder) && isset($locale[$country_code]['state'])) {
+                $locale[$country_code]['state']['placeholder'] = $state_placeholder;
             }
         }
         

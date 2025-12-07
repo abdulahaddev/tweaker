@@ -25,23 +25,21 @@ class TabRenderer
             return;
         }
 
-        echo '<div class="nt-tabs-wrapper">';
-        echo '<ul class="nt-tabs">';
+        echo '<h2 class="nav-tab-wrapper">';
 
         foreach ($tabs as $slug => $title) {
-            $active_class = ($slug === $current_tab) ? ' active' : '';
+            $active_class = ($slug === $current_tab) ? ' nav-tab-active' : '';
             $url = admin_url('admin.php?page=' . $page_slug . '&tab=' . $slug);
 
             printf(
-                '<li class="nt-tab%s"><a href="%s">%s</a></li>',
-                esc_attr($active_class),
+                '<a href="%s" class="nav-tab%s">%s</a>',
                 esc_url($url),
+                esc_attr($active_class),
                 esc_html($title)
             );
         }
 
-        echo '</ul>';
-        echo '</div>';
+        echo '</h2>';
     }
 
     /**
@@ -60,7 +58,7 @@ class TabRenderer
      */
     public static function render_content_start(): void
     {
-        echo '<div class="nt-tab-content">';
+        echo '<div class="nt-tab-content" style="margin-top: 10px;">';
     }
 
     /**

@@ -42,9 +42,9 @@ class SettingsPage
         $current_tab = TabRenderer::get_current_tab('billing');
 
         $tabs = [
-            'billing' => __('Billing Fields', 'tweaker'),
-            'shipping' => __('Shipping Fields', 'tweaker'),
-            'order' => __('Order Fields', 'tweaker'),
+            'billing' => __('Billing', 'tweaker'),
+            'shipping' => __('Shipping', 'tweaker'),
+            'order' => __('Order', 'tweaker'),
         ];
 
         ?>
@@ -58,6 +58,8 @@ class SettingsPage
 
             <form method="post" action="" class="nt-form">
                 <?php wp_nonce_field('nt_checkout_fields_save'); ?>
+                <!-- Hidden input to ensuring save logic triggers on JS submit -->
+                <input type="hidden" name="nt_save_checkout_fields" value="1" />
 
                 <?php
                 switch ($current_tab) {
@@ -73,8 +75,26 @@ class SettingsPage
                 }
                 ?>
 
+
+                <?php
+                // Check if current section is active to determine button state
+                $section_active_key_map = [
+                    'billing' => 'billing_active',
+                    'shipping' => 'shipping_active',
+                    'order' => 'order_active',
+                ];
+                $is_section_active = $this->config[$section_active_key_map[$current_tab]] ?? true;
+                ?>
+
                 <p class="submit">
-                    <button type="submit" name="nt_save_checkout_fields" class="button button-primary">
+                    <button 
+                        type="submit" 
+                        name="nt_save_checkout_fields" 
+                        id="nt-save-changes-btn" 
+                        class="button button-primary"
+                        <?php disabled(!$is_section_active); ?>
+                        style="<?php echo !$is_section_active ? 'opacity: 0.5; cursor: not-allowed;' : ''; ?>"
+                    >
                         <?php esc_html_e('Save Changes', 'tweaker'); ?>
                     </button>
                 </p>
@@ -108,7 +128,68 @@ class SettingsPage
             return ($a['priority'] ?? 10) <=> ($b['priority'] ?? 10);
         });
 
+        // Map group_key to config key for active state
+        // billing_fields -> billing_active, shipping_fields -> shipping_active, order_fields -> order_active
+        $active_key_map = [
+            'billing_fields' => 'billing_active',
+            'shipping_fields' => 'shipping_active',
+            'order_fields' => 'order_active',
+        ];
+        $config_key = $active_key_map[$group_key] ?? $group_key . '_active';
+        $form_key = $group_key . '_active'; // billing_fields_active (used in form input name)
+        $is_active = $this->config[$config_key] ?? true;
         ?>
+        <div style="margin: 0px 0 15px;">
+            <label class="nt-toggle">
+                <input type="checkbox" name="<?php echo esc_attr($form_key); ?>" value="1" <?php checked($is_active); ?> style="display: none;" />
+                <span class="nt-toggle-slider"></span>
+            </label>
+            
+            <?php if ($is_active) : ?>
+                <span style="color: green; margin-left: 10px;">Active</span>
+            <?php else : ?>
+                <span style="color: #999; margin-left: 10px;">Inactive</span>
+            <?php endif; ?>
+        </div>
+
+        <style>
+            .nt-disabled { opacity: 0.5; pointer-events: none; filter: grayscale(100%); transition: all 0.3s ease; }
+        </style>
+        
+        <script>
+            jQuery(document).ready(function($) {
+                var $container = $('.nt-field-table-<?php echo esc_attr($group_key); ?>');
+                var $toggle = $('input[name="<?php echo esc_attr($form_key); ?>"]');
+                var $labelContainer = $toggle.parent().parent(); // Get the div container
+                
+                function updateState() {
+                    var checked = $toggle.is(':checked');
+                    $container.toggleClass('nt-disabled', !checked);
+                    $container.find('input, select, textarea').prop('readonly', !checked);
+                    
+                    // Update label text and color
+                    var $statusSpan = $labelContainer.find('span:not(.nt-toggle-slider)');
+                    if (checked) {
+                        $statusSpan.text('Active').css('color', 'green');
+                    } else {
+                        $statusSpan.text('Inactive').css('color', '#999');
+                    }
+                }
+                
+                // Initial state
+                updateState();
+                
+                // On change
+                $toggle.change(function() {
+                    updateState();
+                    // Auto-save settings when toggled
+                    $(this).closest('form').submit();
+                });
+            });
+        </script>
+        
+        <div class="nt-field-table-<?php echo esc_attr($group_key); ?> <?php echo !$is_active ? 'nt-disabled' : ''; ?>">
+
         <table class="wp-list-table widefat fixed striped">
             <thead>
                 <tr>
@@ -126,6 +207,7 @@ class SettingsPage
                 <?php endforeach; ?>
             </tbody>
         </table>
+        </div>
         <?php
     }
 
@@ -192,6 +274,20 @@ class SettingsPage
         if (isset($_POST['order_fields'])) {
             $new_config['order_fields'] = $this->sanitize_field_group($_POST['order_fields']);
         }
+
+        // Save section enabled states - only update the one being submitted
+        if (isset($_POST['billing_fields'])) {
+            $new_config['billing_active'] = isset($_POST['billing_fields_active']);
+        }
+        
+        if (isset($_POST['shipping_fields'])) {
+            $new_config['shipping_active'] = isset($_POST['shipping_fields_active']);
+        }
+        
+        if (isset($_POST['order_fields'])) {
+            $new_config['order_active'] = isset($_POST['order_fields_active']);
+        }
+
 
         // Save to database
         update_option('nt_checkout_fields_config', $new_config);

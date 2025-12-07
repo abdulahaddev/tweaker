@@ -29,8 +29,14 @@ class ValidationService
         self::$validation_errors = [];
 
         // Validate all field groups
-        foreach (['billing_fields', 'shipping_fields', 'order_fields'] as $group) {
-            if (empty($config[$group])) {
+        $groups = [
+            'billing_fields' => 'billing_active',
+            'shipping_fields' => 'shipping_active',
+            'order_fields' => 'order_active',
+        ];
+
+        foreach ($groups as $group => $active_key) {
+            if (empty($config[$group]) || !($config[$active_key] ?? true)) {
                 continue;
             }
 
@@ -99,7 +105,17 @@ class ValidationService
         $field_label = '';
         
         // Find the custom label from our config
-        foreach (['billing_fields', 'shipping_fields', 'order_fields'] as $group) {
+        $groups = [
+            'billing_fields' => 'billing_active',
+            'shipping_fields' => 'shipping_active',
+            'order_fields' => 'order_active',
+        ];
+
+        foreach ($groups as $group => $active_key) {
+            if (!($config[$active_key] ?? true)) {
+                continue;
+            }
+
             if (isset($config[$group][$key]['label'])) {
                 $field_label = $config[$group][$key]['label'];
                 break;
@@ -161,8 +177,14 @@ class ValidationService
         $config = get_option('nt_checkout_fields_config', []);
         
         // First, check if this error matches a field with a custom validation message
-        foreach (['billing_fields', 'shipping_fields', 'order_fields'] as $group) {
-            if (empty($config[$group])) {
+        $groups = [
+            'billing_fields' => 'billing_active',
+            'shipping_fields' => 'shipping_active',
+            'order_fields' => 'order_active',
+        ];
+
+        foreach ($groups as $group => $active_key) {
+            if (empty($config[$group]) || !($config[$active_key] ?? true)) {
                 continue;
             }
             
@@ -197,8 +219,8 @@ class ValidationService
         // If no custom message, proceed with default label replacement
         $label_map = [];
         
-        foreach (['billing_fields', 'shipping_fields', 'order_fields'] as $group) {
-            if (empty($config[$group])) {
+        foreach ($groups as $group => $active_key) {
+            if (empty($config[$group]) || !($config[$active_key] ?? true)) {
                 continue;
             }
             

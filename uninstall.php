@@ -12,8 +12,14 @@ if (!defined('WP_UNINSTALL_PLUGIN')) {
     exit;
 }
 
+// Define plugin constants needed by core classes
+require_once __DIR__ . '/Core/Constants.php';
+
+// Load logger
+require_once __DIR__ . '/Core/Logger.php';
+
 // Load autoloader
-require_once plugin_dir_path(__FILE__) . 'core/Autoloader.php';
+require_once plugin_dir_path(__FILE__) . 'Core/Autoloader.php';
 $autoloader = new \NabaTech\Tweaker\Core\Autoloader();
 $autoloader->register();
 

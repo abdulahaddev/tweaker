@@ -24,15 +24,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Plugin constants
-define('NT_PLUGIN_VERSION', '1.0.0');
-define('NT_PLUGIN_FILE', __FILE__);
-define('NT_PLUGIN_DIR', plugin_dir_path(__FILE__));
-define('NT_PLUGIN_URL', plugin_dir_url(__FILE__));
-define('NT_PLUGIN_BASENAME', plugin_basename(__FILE__));
-
-// Minimum requirements
-define('NT_MIN_PHP_VERSION', '8.1.0');
-define('NT_MIN_WP_VERSION', '6.9');
+require_once __DIR__ . '/Core/Constants.php';
 
 /**
  * Check minimum requirements
@@ -76,12 +68,12 @@ function nt_check_requirements() {
 /**
  * Load logger first (needed by other core files)
  */
-require_once NT_PLUGIN_DIR . 'core/Logger.php';
+require_once NT_PLUGIN_DIR . 'Core/Logger.php';
 
 /**
  * Autoloader for Tweaker classes
  */
-require_once NT_PLUGIN_DIR . 'core/Autoloader.php';
+require_once NT_PLUGIN_DIR . 'Core/Autoloader.php';
 $nt_autoloader = new \NabaTech\Tweaker\Core\Autoloader();
 $nt_autoloader->register();
 

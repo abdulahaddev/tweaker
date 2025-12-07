@@ -63,22 +63,19 @@ class ModuleLoader
      *
      * @return array List of module IDs to enable
      */
+    /**
+     * Initialize enabled modules list on first run
+     *
+     * @return array List of module IDs to enable
+     */
     private function initialize_enabled_modules(): array
     {
+        // Default to no modules enabled
         $enabled = [];
-        $module_dirs = glob($this->modules_dir . '*', GLOB_ONLYDIR);
-
-        foreach ($module_dirs as $module_dir) {
-            $manifest_file = $module_dir . '/module.json';
-            if (file_exists($manifest_file)) {
-                $manifest = json_decode(file_get_contents($manifest_file), true);
-                if ($manifest && isset($manifest['id']) && $this->validate_requirements($manifest)) {
-                    $enabled[] = $manifest['id'];
-                }
-            }
-        }
-
+        
+        // Save the empty array to DB so we don't run this check again
         update_option('nt_enabled_modules', $enabled);
+        
         return $enabled;
     }
 

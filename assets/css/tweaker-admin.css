@@ -3,54 +3,15 @@
  * Minimal, clean WP-native design
  */
 
-/* Tabs */
-.nt-tabs-wrapper {
-    margin: 20px 0;
-}
-
-.nt-tabs {
-    border-bottom: 1px solid #ccc;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    display: flex;
-    gap: 5px;
-}
-
-.nt-tab {
-    margin: 0 0 -1px 0;
-}
-
-.nt-tab a {
-    display: block;
-    padding: 10px 15px;
-    text-decoration: none;
-    border: 1px solid transparent;
-    border-radius: 3px 3px 0 0;
-    background: #f0f0f1;
-    color: #2c3338;
-    transition: background 0.2s ease;
-}
-
-.nt-tab a:hover {
-    background: #e8e8e9;
-}
-
-.nt-tab.active a {
-    background: #fff;
-    border-color: #ccc #ccc #fff;
-    color: #1d2327;
-    font-weight: 600;
-}
-
 /* Tab content */
 .nt-tab-content {
     background: #fff;
     padding: 20px;
-    border: 1px solid #ccc;
-    border-top: none;
-    border-radius: 0 0 4px 4px;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
 }
+
 
 /* Cards */
 .nt-card {
@@ -194,11 +155,11 @@
     border-radius: 50%;
 }
 
-.nt-toggle input:checked + .nt-toggle-slider {
+.nt-toggle input:checked+.nt-toggle-slider {
     background-color: #2271b1;
 }
 
-.nt-toggle input:checked + .nt-toggle-slider:before {
+.nt-toggle input:checked+.nt-toggle-slider:before {
     transform: translateX(20px);
 }
 
