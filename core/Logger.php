@@ -14,8 +14,8 @@ if (!defined('ABSPATH')) {
  * Global logging function
  * This must be simple and work during early activation
  */
-if (!function_exists('nt_log')) {
-    function nt_log(string $message, mixed $context = null): void
+if (!function_exists('tweaker_log')) {
+    function tweaker_log(string $message, mixed $context = null): void
     {
         // Only log if WP_DEBUG is enabled
         if (!defined('WP_DEBUG') || !WP_DEBUG) {

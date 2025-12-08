@@ -98,7 +98,7 @@ class ModuleLoader
         // Parse manifest
         $manifest = json_decode(file_get_contents($manifest_file), true);
         if (json_last_error() !== JSON_ERROR_NONE) {
-            nt_log("Invalid module.json in: {$module_dir}");
+            tweaker_log("Invalid module.json in: {$module_dir}");
             return null;
         }
 
@@ -125,7 +125,7 @@ class ModuleLoader
         // Load Module.php
         $module_file = $module_dir . '/Module.php';
         if (!file_exists($module_file)) {
-            nt_log("Module.php not found in: {$module_dir}");
+            tweaker_log("Module.php not found in: {$module_dir}");
             return null;
         }
 
@@ -133,7 +133,7 @@ class ModuleLoader
 
         // Instantiate module
         if (!class_exists($full_class)) {
-            nt_log("Module class not found: {$full_class}");
+            tweaker_log("Module class not found: {$full_class}");
             return null;
         }
 

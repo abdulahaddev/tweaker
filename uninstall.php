@@ -13,9 +13,9 @@ if (!defined('WP_UNINSTALL_PLUGIN')) {
 }
 
 // Check if user wants to delete data on uninstall
-$delete_data = get_option('nt_delete_data_on_uninstall', 0);
+$tweaker_delete_data = get_option('nt_delete_data_on_uninstall', 0);
 
-if (!$delete_data) {
+if (!$tweaker_delete_data) {
     // User wants to keep data - exit without cleanup
     return;
 }
@@ -29,9 +29,9 @@ require_once NT_CORE_DIR . '/Logger.php';
 
 // Load autoloader
 require_once NT_CORE_DIR . '/Autoloader.php';
-$autoloader = new \NabaTech\Tweaker\Core\Autoloader();
-$autoloader->register();
+$tweaker_autoloader = new \NabaTech\Tweaker\Core\Autoloader();
+$tweaker_autoloader->register();
 
 // Run kernel uninstall
-$kernel = \NabaTech\Tweaker\Core\Kernel::get_instance();
-$kernel->uninstall();
+$tweaker_kernel = \NabaTech\Tweaker\Core\Kernel::get_instance();
+$tweaker_kernel->uninstall();

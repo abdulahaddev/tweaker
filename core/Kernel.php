@@ -84,7 +84,7 @@ class Kernel
         $this->register_checkout_hooks();
 
         // Fire kernel initialization hook
-        do_action('nt_kernel_initialized', $this);
+        do_action('tweaker_kernel_initialized', $this);
     }
     
     /**
@@ -176,7 +176,7 @@ class Kernel
             update_option('nt_enabled_modules', array_values($enabled_modules));
 
             // Log the auto-disable
-            nt_log("Auto-disabled modules due to {$dependency} deactivation: " . implode(', ', $disabled));
+            tweaker_log("Auto-disabled modules due to {$dependency} deactivation: " . implode(', ', $disabled));
         }
     }
 
@@ -214,7 +214,7 @@ class Kernel
         update_option('nt_activated', true);
         update_option('nt_version', NT_PLUGIN_VERSION);
 
-        nt_log('Tweaker activated successfully');
+        tweaker_log('Tweaker activated successfully');
     }
 
     /**
@@ -231,7 +231,7 @@ class Kernel
 
         delete_option('nt_activated');
 
-        nt_log('Tweaker deactivated');
+        tweaker_log('Tweaker deactivated');
     }
 
     /**
@@ -257,7 +257,7 @@ class Kernel
         $wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE 'nt_%'");
         // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
-        nt_log('Tweaker uninstalled completely');
+        tweaker_log('Tweaker uninstalled completely');
     }
 
     /**

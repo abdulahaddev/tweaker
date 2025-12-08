@@ -19,12 +19,10 @@ if (!defined('NT_PLUGIN_VERSION')) {
 
     // Resolve main plugin file path
     // This file is in /core/Constants.php and main file is /tweaker.php
-    $main_file = dirname(__DIR__) . '/tweaker.php';
-    
-    define('NT_PLUGIN_FILE', $main_file);
-    define('NT_PLUGIN_DIR', plugin_dir_path($main_file));
-    define('NT_PLUGIN_URL', plugin_dir_url($main_file));
-    define('NT_PLUGIN_BASENAME', plugin_basename($main_file));
+    define('NT_PLUGIN_FILE', dirname(__DIR__) . '/tweaker.php');
+    define('NT_PLUGIN_DIR', plugin_dir_path(NT_PLUGIN_FILE));
+    define('NT_PLUGIN_URL', plugin_dir_url(NT_PLUGIN_FILE));
+    define('NT_PLUGIN_BASENAME', plugin_basename(NT_PLUGIN_FILE));
 
     // Minimum requirements
     define('NT_MIN_PHP_VERSION', '8.1.0');

@@ -307,7 +307,7 @@ class SettingsPage
         // Update current config
         $this->config = $new_config;
 
-        nt_log('Checkout fields configuration saved', $new_config);
+        tweaker_log('Checkout fields configuration saved', $new_config);
     }
 
     /**

@@ -103,7 +103,7 @@ class CheckoutFields_Module
         add_option('nt_checkout_fields_config', $default_config);
         add_option('nt_checkout_fields_version', $this->manifest['version']);
 
-        nt_log('CheckoutFields module installed');
+        tweaker_log('CheckoutFields module installed');
     }
 
     /**
@@ -111,7 +111,7 @@ class CheckoutFields_Module
      */
     public function activate(): void
     {
-        nt_log('CheckoutFields module activated');
+        tweaker_log('CheckoutFields module activated');
     }
 
     /**
@@ -119,7 +119,7 @@ class CheckoutFields_Module
      */
     public function deactivate(): void
     {
-        nt_log('CheckoutFields module deactivated');
+        tweaker_log('CheckoutFields module deactivated');
     }
 
     /**
@@ -131,7 +131,7 @@ class CheckoutFields_Module
         delete_option('nt_checkout_fields_config');
         delete_option('nt_checkout_fields_version');
 
-        nt_log('CheckoutFields module uninstalled');
+        tweaker_log('CheckoutFields module uninstalled');
     }
 
     /**

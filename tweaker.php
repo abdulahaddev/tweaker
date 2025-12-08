@@ -81,8 +81,8 @@ require_once NT_CORE_DIR . '/Logger.php';
  * Autoloader for Tweaker classes
  */
 require_once NT_CORE_DIR . '/Autoloader.php';
-$nt_autoloader = new \NabaTech\Tweaker\Core\Autoloader();
-$nt_autoloader->register();
+$tweaker_autoloader = new \NabaTech\Tweaker\Core\Autoloader();
+$tweaker_autoloader->register();
 
 /**
  * Initialize Tweaker
