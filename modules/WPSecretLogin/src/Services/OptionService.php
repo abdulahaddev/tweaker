@@ -25,7 +25,7 @@ class OptionService {
             'login_slug' => 'login',
             'redirect_slug' => '404',
             'redirect_to_secret' => false,
-            'enabled' => true,
+            'enabled' => false,
         ];
 
         $settings = get_option(self::OPTION_KEY, []);
