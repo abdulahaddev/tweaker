@@ -22,13 +22,13 @@ if (!$delete_data) {
 
 // User chose to delete data - proceed with cleanup
 // Define plugin constants needed by core classes
-require_once __DIR__ . '/Core/Constants.php';
+require_once __DIR__ . '/core/Constants.php';
 
 // Load logger
-require_once __DIR__ . '/Core/Logger.php';
+require_once NT_CORE_DIR . '/Logger.php';
 
 // Load autoloader
-require_once plugin_dir_path(__FILE__) . 'Core/Autoloader.php';
+require_once NT_CORE_DIR . '/Autoloader.php';
 $autoloader = new \NabaTech\Tweaker\Core\Autoloader();
 $autoloader->register();
 

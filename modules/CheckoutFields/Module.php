@@ -330,6 +330,10 @@ class CheckoutFields_Module
                     'priority' => 10,
                 ],
             ],
+            // Section active states - all disabled by default on first activation
+            'billing_active' => false,
+            'shipping_active' => false,
+            'order_active' => false,
         ];
     }
 

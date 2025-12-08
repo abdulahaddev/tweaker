@@ -75,12 +75,12 @@ function nt_check_requirements() {
 /**
  * Load logger first (needed by other core files)
  */
-require_once NT_PLUGIN_DIR . 'core/Logger.php';
+require_once NT_CORE_DIR . '/Logger.php';
 
 /**
  * Autoloader for Tweaker classes
  */
-require_once NT_PLUGIN_DIR . 'core/Autoloader.php';
+require_once NT_CORE_DIR . '/Autoloader.php';
 $nt_autoloader = new \NabaTech\Tweaker\Core\Autoloader();
 $nt_autoloader->register();
 
