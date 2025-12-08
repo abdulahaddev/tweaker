@@ -1,11 +1,11 @@
 <?php
 /**
  * Plugin Name: Tweaker
- * Plugin URI: https://nabatech.com/tweaker
- * Description: Modular WordPress plugin system for Naba Tech Ltd - Professional, maintainable, and extensible.
+ * Plugin URI: https://nabatechworld.com
+ * Description: Modular WordPress plugin system by Naba Tech World - Professional, maintainable, and extensible.
  * Version: 1.0.0
- * Author: Naba Tech Ltd
- * Author URI: https://nabatech.com
+ * Author: Abdul Ahad
+ * Author URI: https://github.com/abdulahaddev
  * Text Domain: tweaker
  * Domain Path: /languages
  * Requires at least: 6.9
@@ -148,6 +148,21 @@ function nt_plugin_action_links($links) {
     return $links;
 }
 add_filter('plugin_action_links_' . plugin_basename(__FILE__), __NAMESPACE__ . '\nt_plugin_action_links');
+
+/**
+ * Add links to plugin row meta
+ */
+function nt_plugin_row_meta($links, $file) {
+    if (strpos($file, 'tweaker.php') !== false) {
+        $links[] = sprintf(
+            '<a href="%s" target="_blank">%s</a>',
+            'https://nabatechworld.com',
+            __('Naba Tech World', 'tweaker')
+        );
+    }
+    return $links;
+}
+add_filter('plugin_row_meta', __NAMESPACE__ . '\nt_plugin_row_meta', 10, 2);
 
 /**
  * Uninstall handling - see uninstall.php

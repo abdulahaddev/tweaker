@@ -1,5 +1,5 @@
 === Tweaker ===
-Contributors: nabatech
+Contributors: abdulahaddev
 Tags: woocommerce, checkout, security, login, customization
 Requires at least: 6.9
 Tested up to: 6.9
@@ -148,7 +148,7 @@ Stay tuned. We've got some genuinely useful stuff in the pipeline.
 
 Need help? Found a bug? Got a feature request?
 
-Visit [nabatech.com](https://nabatech.com) to get in touch with our team.
+Visit [nabatechworld.com](https://nabatechworld.com) to get in touch with our team.
 
 == Privacy ==
 
@@ -156,4 +156,4 @@ This plugin does not collect, store, or transmit any personal data. All settings
 
 == Credits ==
 
-Built with ☕ by the team at Naba Tech Ltd.
+Built with ☕ by the team at Naba Tech World.

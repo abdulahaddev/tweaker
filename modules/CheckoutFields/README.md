@@ -51,4 +51,4 @@ After activation, navigate to **Tweaker > Checkout Fields** in the WordPress adm
 
 ## License
 
-GPL-2.0+ - Naba Tech Ltd
+GPL-2.0+ - Naba Tech World

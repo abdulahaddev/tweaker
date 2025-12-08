@@ -3,7 +3,7 @@
   "name": "Checkout Fields",
   "description": "WooCommerce checkout field customization and validation",
   "version": "1.0.0",
-  "author": "Naba Tech Ltd",
+  "author": "Abdul Ahad",
   "requires": {
     "wordpress": "6.9+",
     "php": "8.1+",
