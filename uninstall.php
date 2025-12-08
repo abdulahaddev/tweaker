@@ -25,10 +25,10 @@ if (!$tweaker_delete_data) {
 require_once __DIR__ . '/core/Constants.php';
 
 // Load logger
-require_once NT_CORE_DIR . '/Logger.php';
+require_once TWEAKER_CORE_DIR . '/Logger.php';
 
 // Load autoloader
-require_once NT_CORE_DIR . '/Autoloader.php';
+require_once TWEAKER_CORE_DIR . '/Autoloader.php';
 $tweaker_autoloader = new \NabaTech\Tweaker\Core\Autoloader();
 $tweaker_autoloader->register();
 
