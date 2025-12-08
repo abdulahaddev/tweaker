@@ -117,8 +117,9 @@ class SettingsPage
 
         if (empty($fields)) {
             echo '<p>' . sprintf(
+                /* translators: %s: Field group label (e.g., billing, shipping, order) */
                 esc_html__('No %s fields configured yet.', 'tweaker'),
-                strtolower($group_label)
+                esc_html(strtolower($group_label))
             ) . '</p>';
             return;
         }
@@ -252,23 +253,31 @@ class SettingsPage
      */
     private function save_settings(): void
     {
+        // Verify nonce within method for PHPCS compliance
+        if (!isset($_POST['_wpnonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['_wpnonce'])), 'nt_checkout_fields_save')) {
+            return;
+        }
+
         // Get existing configuration
         $existing_config = get_option('nt_checkout_fields_config', []);
         $new_config = $existing_config; // Start with existing data
 
         // Process billing fields
         if (isset($_POST['billing_fields'])) {
-            $new_config['billing_fields'] = $this->sanitize_field_group($_POST['billing_fields']);
+            $billing_fields = isset($_POST['billing_fields']) && is_array($_POST['billing_fields']) ? wp_unslash($_POST['billing_fields']) : []; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+            $new_config['billing_fields'] = $this->sanitize_field_group($billing_fields);
         }
 
         // Process shipping fields
         if (isset($_POST['shipping_fields'])) {
-            $new_config['shipping_fields'] = $this->sanitize_field_group($_POST['shipping_fields']);
+            $shipping_fields = isset($_POST['shipping_fields']) && is_array($_POST['shipping_fields']) ? wp_unslash($_POST['shipping_fields']) : []; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+            $new_config['shipping_fields'] = $this->sanitize_field_group($shipping_fields);
         }
 
         // Process order fields
         if (isset($_POST['order_fields'])) {
-            $new_config['order_fields'] = $this->sanitize_field_group($_POST['order_fields']);
+            $order_fields = isset($_POST['order_fields']) && is_array($_POST['order_fields']) ? wp_unslash($_POST['order_fields']) : []; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+            $new_config['order_fields'] = $this->sanitize_field_group($order_fields);
         }
 
         // Save section enabled states - only update the one being submitted

@@ -50,7 +50,8 @@ class TabRenderer
      */
     public static function get_current_tab(string $default = ''): string
     {
-        return isset($_GET['tab']) ? sanitize_text_field($_GET['tab']) : $default;
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Tab navigation doesn't require nonce verification.
+        return isset($_GET['tab']) ? sanitize_text_field(wp_unslash($_GET['tab'])) : $default;
     }
 
     /**

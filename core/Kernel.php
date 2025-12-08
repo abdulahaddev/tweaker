@@ -253,7 +253,9 @@ class Kernel
 
         // Remove all nt_* options
         global $wpdb;
+        // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         $wpdb->query("DELETE FROM {$wpdb->options} WHERE option_name LIKE 'nt_%'");
+        // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
         nt_log('Tweaker uninstalled completely');
     }

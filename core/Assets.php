@@ -25,7 +25,7 @@ class Assets
         }
 
         // Let modules enqueue their own assets
-        do_action('nt_enqueue_module_assets', $screen);
+        do_action('tweaker_enqueue_module_assets', $screen);
     }
 
     /**

@@ -129,16 +129,22 @@ function nt_deactivate() {
 register_deactivation_hook(__FILE__, __NAMESPACE__ . '\nt_deactivate');
 
 /**
- * Add Settings link to plugins page
+ * Add Dashboard and Settings links to plugins page
  */
 function nt_plugin_action_links($links) {
-    $settings_link = sprintf(
+    $dashboard_link = sprintf(
         '<a href="%s">%s</a>',
         admin_url('admin.php?page=tweaker'),
+        __('Dashboard', 'tweaker')
+    );
+    
+    $settings_link = sprintf(
+        '<a href="%s">%s</a>',
+        admin_url('admin.php?page=tweaker-settings'),
         __('Settings', 'tweaker')
     );
     
-    array_unshift($links, $settings_link);
+    array_unshift($links, $settings_link, $dashboard_link);
     return $links;
 }
 add_filter('plugin_action_links_' . plugin_basename(__FILE__), __NAMESPACE__ . '\nt_plugin_action_links');

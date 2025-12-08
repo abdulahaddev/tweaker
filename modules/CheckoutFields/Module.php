@@ -90,7 +90,7 @@ class CheckoutFields_Module
         add_filter('woocommerce_add_error', [$validation_service, 'customize_error_messages'], 10, 1);
 
         // Admin assets
-        add_action('nt_enqueue_module_assets', [$this, 'enqueue_assets']);
+        add_action('tweaker_enqueue_module_assets', [$this, 'enqueue_assets']);
     }
 
     /**
@@ -349,8 +349,8 @@ class CheckoutFields_Module
         foreach ($default_config as $group_key => $fields) {
             if (!isset($saved_config[$group_key])) {
                 $saved_config[$group_key] = $fields;
-            } else {
-                // Merge individual fields
+            } elseif (is_array($fields)) {
+                // Merge individual fields (only for array values, skip boolean flags like billing_active)
                 foreach ($fields as $field_key => $field_config) {
                     if (!isset($saved_config[$group_key][$field_key])) {
                         $saved_config[$group_key][$field_key] = $field_config;

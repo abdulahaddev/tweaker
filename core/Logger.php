@@ -25,10 +25,11 @@ if (!function_exists('nt_log')) {
         $log_message = '[Tweaker] ' . $message;
 
         if ($context !== null) {
-            $log_message .= ' | Context: ' . print_r($context, true);
+            $log_message .= ' | Context: ' . wp_json_encode($context);
         }
 
-        // Use error_log to write to debug.log
+        // Use error_log to write to debug.log when WP_DEBUG is enabled
+        // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- Intentional debug logging
         error_log($log_message);
     }
 }

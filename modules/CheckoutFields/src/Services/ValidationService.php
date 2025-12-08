@@ -23,6 +23,7 @@ class ValidationService
     public function validate_checkout_fields(): void
     {
         $config = get_option('nt_checkout_fields_config', []);
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is handled by WooCommerce checkout process
         $posted_data = $_POST;
 
         // Clear previous errors
@@ -74,7 +75,7 @@ class ValidationService
             wc_add_notice($error_message, 'error');
 
             // Store for inline display
-            self::$validation_errors[$field_key] = strip_tags($error_message);
+            self::$validation_errors[$field_key] = wp_strip_all_tags($error_message);
         }
 
         // Additional validation rules can be added here
@@ -128,12 +129,14 @@ class ValidationService
         }
         
         // Check if field is empty (will trigger validation error)
-        $field_value = isset($_POST[$key]) ? $_POST[$key] : $value;
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is handled by WooCommerce checkout process
+        $field_value = isset($_POST[$key]) ? sanitize_text_field(wp_unslash($_POST[$key])) : $value;
         if (empty($field_value) && $is_required) {
             $has_error = true;
         }
 
         // Add inline error if validation failed
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification is handled by WooCommerce checkout process
         if ($has_error && isset($_POST['woocommerce_checkout_place_order'])) {
             // Add error class to field wrapper
             $field = str_replace(
@@ -143,7 +146,7 @@ class ValidationService
             );
 
             // Create error message
-            $error_message = sprintf('%s is a required field.', strip_tags($field_label));
+            $error_message = sprintf('%s is a required field.', wp_strip_all_tags($field_label));
             
             // Inject error message before closing </p> tag
             $error_html = '<span class="nt-field-error woocommerce-error" style="color: #e2401c; font-size: 0.875em; display: block; margin-top: 5px;">';
@@ -256,9 +259,6 @@ class ValidationService
                 '<strong>' . $custom . '</strong>',
                 $error
             );
-            
-            // Also replace without <strong> tags
-            $error = str_replace($default, $custom, $error);
         }
         
         return $error;

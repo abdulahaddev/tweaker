@@ -58,15 +58,22 @@ class SecretLogin {
     public function check_request(): void {
         global $pagenow;
 
-        if (is_multisite() && (strpos($_SERVER['REQUEST_URI'], 'wp-signup') !== false || strpos($_SERVER['REQUEST_URI'], 'wp-activate') !== false)) {
+        // Validate and sanitize REQUEST_URI
+        if (!isset($_SERVER['REQUEST_URI'])) {
+            return;
+        }
+        $raw_request_uri = sanitize_text_field(wp_unslash($_SERVER['REQUEST_URI']));
+
+        if (is_multisite() && (strpos($raw_request_uri, 'wp-signup') !== false || strpos($raw_request_uri, 'wp-activate') !== false)) {
              return;
         }
 
-        $request_uri = rawurldecode($_SERVER['REQUEST_URI']);
+        $request_uri = rawurldecode($raw_request_uri);
         $login_slug = $this->option_service->get('login_slug');
 
         // 1. Check if accessing the custom login slug
-        if (untrailingslashit(parse_url($request_uri, PHP_URL_PATH)) === home_url($login_slug, 'relative') || (!get_option('permalink_structure') && isset($_GET[$login_slug]))) {
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Public route detection, not a privileged operation
+        if (untrailingslashit(wp_parse_url($request_uri, PHP_URL_PATH)) === home_url($login_slug, 'relative') || (!get_option('permalink_structure') && isset($_GET[$login_slug]))) {
             $_SERVER['SCRIPT_NAME'] = '/wp-login.php'; // Trick WP into thinking it's wp-login.php
             $pagenow = 'wp-login.php';
             return;
@@ -112,7 +119,12 @@ class SecretLogin {
         }
 
         // Handle wp-admin Access Control
-        $request = parse_url(rawurldecode($_SERVER['REQUEST_URI']));
+        // Validate and sanitize REQUEST_URI
+        if (!isset($_SERVER['REQUEST_URI'])) {
+            return;
+        }
+        $sanitized_request_uri = sanitize_text_field(wp_unslash($_SERVER['REQUEST_URI']));
+        $request = wp_parse_url(rawurldecode($sanitized_request_uri));
         if (is_admin() && !is_user_logged_in() && !defined('WP_CLI') && !defined('DOING_AJAX') && !defined('DOING_CRON')) {
              // Block access to wp-admin if not logged in
              // Except for admin-post.php and options.php which might be needed
@@ -172,7 +184,7 @@ class SecretLogin {
             $new_url = $this->new_login_url($scheme);
 
             // Preserve query args
-            $query = parse_url($url, PHP_URL_QUERY);
+            $query = wp_parse_url($url, PHP_URL_QUERY);
             if ($query) {
                 $new_url = add_query_arg($query, $new_url);
             }

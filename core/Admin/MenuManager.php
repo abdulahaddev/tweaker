@@ -147,7 +147,7 @@ class MenuManager
                                             $icon = $dep_met ? '✓' : '✗';
                                             $color = $dep_met ? 'green' : 'red';
                                             ?>
-                                            <span style="color: <?php echo $color; ?>;"><?php echo $icon; ?></span>
+                                            <span style="color: <?php echo esc_attr($color); ?>;"><?php echo esc_html($icon); ?></span>
                                             <?php echo esc_html(ucfirst($dep)); ?> <?php echo esc_html($version); ?>
                                         </div>
                                     <?php endforeach; ?>
@@ -259,8 +259,18 @@ class MenuManager
      */
     private function handle_module_toggle(): void
     {
-        $module_id = sanitize_text_field($_POST['nt_toggle_module']);
-        $action = sanitize_text_field($_POST['nt_module_action']);
+        // Verify nonce
+        if (!isset($_POST['nt_nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['nt_nonce'])), 'nt_toggle_module')) {
+            wp_die(esc_html__('Security check failed.', 'tweaker'));
+        }
+        
+        // Validate and sanitize POST data
+        if (!isset($_POST['nt_toggle_module']) || !isset($_POST['nt_module_action'])) {
+            wp_die(esc_html__('Missing required parameters.', 'tweaker'));
+        }
+        
+        $module_id = sanitize_text_field(wp_unslash($_POST['nt_toggle_module']));
+        $action = sanitize_text_field(wp_unslash($_POST['nt_module_action']));
         
         $enabled_modules = get_option('nt_enabled_modules', []);
         $redirect_url = admin_url('admin.php?page=tweaker'); // Default redirect
@@ -276,6 +286,7 @@ class MenuManager
                     // Store success notice in transient
                     set_transient('nt_module_notice', [
                         'type' => 'success',
+                        /* translators: %s: Module name */
                         'message' => sprintf(__('Module "%s" has been enabled.', 'tweaker'), $all_modules[$module_id]['name'])
                     ], 30);
                     
@@ -303,12 +314,13 @@ class MenuManager
             // Store success notice in transient
             set_transient('nt_module_notice', [
                 'type' => 'success',
+                /* translators: %s: Module name */
                 'message' => sprintf(__('Module "%s" has been disabled.', 'tweaker'), $module_name)
             ], 30);
         }
         
         // Redirect
-        wp_redirect($redirect_url);
+        wp_safe_redirect($redirect_url);
         exit;
     }
 

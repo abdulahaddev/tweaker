@@ -74,6 +74,7 @@ class SettingsPage {
         // if the option name matches.
         // However, OptionService uses 'nt_wp_secret_login_settings'.
         
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- settings-updated is set by WordPress after nonce verification
         if (isset($_GET['settings-updated'])) {
              add_settings_error('nt_wp_secret_login_messages', 'nt_wp_secret_login_message', __('Settings Saved', 'tweaker'), 'updated');
         }
@@ -101,7 +102,10 @@ class SettingsPage {
                         <td>
                             <input type="text" name="nt_wp_secret_login_settings[login_slug]" value="<?php echo esc_attr($settings['login_slug']); ?>" class="regular-text" />
                             <p class="description">
-                                <?php printf(esc_html__('Your login URL will be: %s', 'tweaker'), '<code>' . home_url($settings['login_slug']) . '</code>'); ?>
+                                <?php 
+                                /* translators: %s: Login URL with slug */
+                                printf(esc_html__('Your login URL will be: %s', 'tweaker'), '<code>' . esc_url(home_url($settings['login_slug'])) . '</code>'); 
+                                ?>
                             </p>
                         </td>
                     </tr>
@@ -121,8 +125,8 @@ class SettingsPage {
                             <?php
                             wp_dropdown_pages([
                                 'name' => 'nt_wp_secret_login_settings[redirect_slug]',
-                                'selected' => $settings['redirect_slug'],
-                                'show_option_none' => __('Default 404 Page', 'tweaker'),
+                                'selected' => esc_attr($settings['redirect_slug']),
+                                'show_option_none' => esc_html__('Default 404 Page', 'tweaker'),
                                 'option_none_value' => '404',
                             ]);
                             ?>
