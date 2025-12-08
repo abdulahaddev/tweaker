@@ -36,7 +36,7 @@ class Assets
         // Shared CSS
         wp_enqueue_style(
             'nt-admin',
-            NT_PLUGIN_URL . 'assets/css/tweaker-admin.css',
+            TWEAKER_PLUGIN_URL . 'assets/css/tweaker-admin.css',
             [],
             $this->get_file_version('assets/css/tweaker-admin.css')
         );
@@ -44,7 +44,7 @@ class Assets
         // Shared JS
         wp_enqueue_script(
             'nt-admin',
-            NT_PLUGIN_URL . 'assets/js/tweaker-admin.js',
+            TWEAKER_PLUGIN_URL . 'assets/js/tweaker-admin.js',
             ['jquery'],
             $this->get_file_version('assets/js/tweaker-admin.js'),
             true
@@ -59,11 +59,11 @@ class Assets
      */
     private function get_file_version(string $file): string
     {
-        $file_path = NT_PLUGIN_DIR . $file;
+        $file_path = TWEAKER_PLUGIN_DIR . $file;
         if (file_exists($file_path)) {
             return (string) filemtime($file_path);
         }
-        return NT_PLUGIN_VERSION;
+        return TWEAKER_PLUGIN_VERSION;
     }
 
     /**
@@ -122,13 +122,13 @@ class Assets
      */
     private static function get_module_file_version(string $module_url, string $file): string
     {
-        $module_dir = str_replace(NT_PLUGIN_URL, NT_PLUGIN_DIR, $module_url);
+        $module_dir = str_replace(TWEAKER_PLUGIN_URL, TWEAKER_PLUGIN_DIR, $module_url);
         $file_path = $module_dir . $file;
 
         if (file_exists($file_path)) {
             return (string) filemtime($file_path);
         }
 
-        return NT_PLUGIN_VERSION;
+        return TWEAKER_PLUGIN_VERSION;
     }
 }

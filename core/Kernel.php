@@ -150,7 +150,7 @@ class Kernel
     private function auto_disable_dependent_modules(string $dependency): void
     {
         $enabled_modules = get_option('nt_enabled_modules', []);
-        $modules_dir = NT_PLUGIN_DIR . 'modules/';
+        $modules_dir = TWEAKER_PLUGIN_DIR . 'modules/';
         $disabled = [];
 
         foreach ($enabled_modules as $module_id) {
@@ -212,7 +212,7 @@ class Kernel
 
         // Set activation flag
         update_option('nt_activated', true);
-        update_option('nt_version', NT_PLUGIN_VERSION);
+        update_option('nt_version', TWEAKER_PLUGIN_VERSION);
 
         tweaker_log('Tweaker activated successfully');
     }

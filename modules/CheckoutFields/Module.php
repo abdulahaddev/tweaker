@@ -39,7 +39,7 @@ class CheckoutFields_Module
     public function __construct(string $module_dir, array $manifest)
     {
         $this->module_dir = trailingslashit($module_dir);
-        $this->module_url = str_replace(NT_PLUGIN_DIR, NT_PLUGIN_URL, $this->module_dir);
+        $this->module_url = str_replace(TWEAKER_PLUGIN_DIR, TWEAKER_PLUGIN_URL, $this->module_dir);
         $this->manifest = $manifest;
 
         // Load services

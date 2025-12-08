@@ -194,7 +194,7 @@ class MenuManager
     private function get_all_modules(): array
     {
         $modules = [];
-        $modules_dir = NT_PLUGIN_DIR . 'modules';
+        $modules_dir = TWEAKER_PLUGIN_DIR . 'modules';
         
         if (!is_dir($modules_dir)) {
             return $modules;

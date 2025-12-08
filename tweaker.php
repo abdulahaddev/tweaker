@@ -40,20 +40,20 @@ function nt_check_requirements() {
     $errors = [];
 
     // Check PHP version
-    if (version_compare(PHP_VERSION, NT_MIN_PHP_VERSION, '<')) {
+    if (version_compare(PHP_VERSION, TWEAKER_MIN_PHP_VERSION, '<')) {
         $errors[] = sprintf(
             'Tweaker requires PHP %s or higher. You are running PHP %s.',
-            NT_MIN_PHP_VERSION,
+            TWEAKER_MIN_PHP_VERSION,
             PHP_VERSION
         );
     }
 
     // Check WordPress version
     global $wp_version;
-    if (version_compare($wp_version, NT_MIN_WP_VERSION, '<')) {
+    if (version_compare($wp_version, TWEAKER_MIN_WP_VERSION, '<')) {
         $errors[] = sprintf(
             'Tweaker requires WordPress %s or higher. You are running WordPress %s.',
-            NT_MIN_WP_VERSION,
+            TWEAKER_MIN_WP_VERSION,
             $wp_version
         );
     }
@@ -75,12 +75,12 @@ function nt_check_requirements() {
 /**
  * Load logger first (needed by other core files)
  */
-require_once NT_CORE_DIR . '/Logger.php';
+require_once TWEAKER_CORE_DIR . '/Logger.php';
 
 /**
  * Autoloader for Tweaker classes
  */
-require_once NT_CORE_DIR . '/Autoloader.php';
+require_once TWEAKER_CORE_DIR . '/Autoloader.php';
 $tweaker_autoloader = new \NabaTech\Tweaker\Core\Autoloader();
 $tweaker_autoloader->register();
 

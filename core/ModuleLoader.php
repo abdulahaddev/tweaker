@@ -22,7 +22,7 @@ class ModuleLoader
      */
     public function __construct()
     {
-        $this->modules_dir = NT_PLUGIN_DIR . 'modules/';
+        $this->modules_dir = TWEAKER_PLUGIN_DIR . 'modules/';
     }
 
     /**
