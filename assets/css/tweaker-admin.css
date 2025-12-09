@@ -188,3 +188,76 @@
     border-color: #dba617;
     color: #5f4d00;
 }
+
+/* ===== SHARED MODULE STYLES ===== */
+
+/* Toggle Status Labels */
+.nt-status-active {
+    color: #2271b1;
+    font-weight: 600;
+    margin-left: 10px;
+}
+
+.nt-status-inactive {
+    color: #999;
+    margin-left: 10px;
+}
+
+/* Disabled Section Container */
+.nt-disabled {
+    opacity: 0.5;
+    pointer-events: none;
+    filter: grayscale(100%);
+    transition: all 0.3s ease;
+}
+
+/* Disabled Individual Field Row */
+.nt-field-disabled {
+    opacity: 0.5;
+    filter: grayscale(100%);
+    transition: all 0.3s ease;
+}
+
+/* Keep the enabled toggle clickable in disabled rows */
+.nt-field-disabled td:last-child {
+    opacity: 1;
+    filter: none;
+}
+
+/* Prevent interaction with disabled fields but allow toggle */
+.nt-field-disabled input:not([name*="[enabled]"]),
+.nt-field-disabled select,
+.nt-field-disabled textarea {
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+/* Table input fields */
+.wp-list-table input[type="text"],
+.wp-list-table input[type="url"],
+.wp-list-table input[type="email"] {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Compact table padding */
+.wp-list-table td {
+    padding: 12px 10px;
+    vertical-align: middle;
+}
+
+/* Save Button */
+.nt-form .submit {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #dcdcde;
+}
+
+/* Field Errors */
+.nt-field-error {
+    color: #d63638;
+    font-size: 12px;
+    display: block;
+    margin-top: 4px;
+    font-weight: 500;
+}

@@ -60,6 +60,7 @@ class SettingsPage
                 <?php wp_nonce_field('nt_checkout_fields_save'); ?>
                 <!-- Hidden input to ensuring save logic triggers on JS submit -->
                 <input type="hidden" name="nt_save_checkout_fields" value="1" />
+                <input type="hidden" name="nt_submission_type" id="nt_submission_type" value="save" />
 
                 <?php
                 switch ($current_tab) {
@@ -180,6 +181,7 @@ class SettingsPage
                 
                 $toggle.change(function() {
                     updateState();
+                    $('#nt_submission_type').val('toggle');
                     $(this).closest('form').submit();
                 });
             });
@@ -262,22 +264,27 @@ class SettingsPage
         $existing_config = get_option('nt_checkout_fields_config', []);
         $new_config = $existing_config; // Start with existing data
 
-        // Process billing fields
-        if (isset($_POST['billing_fields'])) {
-            $billing_fields = isset($_POST['billing_fields']) && is_array($_POST['billing_fields']) ? wp_unslash($_POST['billing_fields']) : []; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-            $new_config['billing_fields'] = $this->sanitize_field_group($billing_fields);
-        }
+        $submission_type = isset($_POST['nt_submission_type']) ? sanitize_text_field(wp_unslash($_POST['nt_submission_type'])) : 'save';
 
-        // Process shipping fields
-        if (isset($_POST['shipping_fields'])) {
-            $shipping_fields = isset($_POST['shipping_fields']) && is_array($_POST['shipping_fields']) ? wp_unslash($_POST['shipping_fields']) : []; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-            $new_config['shipping_fields'] = $this->sanitize_field_group($shipping_fields);
-        }
+        // Only save fields if this is a full save, not just a toggle
+        if ($submission_type === 'save') {
+            // Process billing fields
+            if (isset($_POST['billing_fields'])) {
+                $billing_fields = isset($_POST['billing_fields']) && is_array($_POST['billing_fields']) ? wp_unslash($_POST['billing_fields']) : []; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+                $new_config['billing_fields'] = $this->sanitize_field_group($billing_fields);
+            }
 
-        // Process order fields
-        if (isset($_POST['order_fields'])) {
-            $order_fields = isset($_POST['order_fields']) && is_array($_POST['order_fields']) ? wp_unslash($_POST['order_fields']) : []; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-            $new_config['order_fields'] = $this->sanitize_field_group($order_fields);
+            // Process shipping fields
+            if (isset($_POST['shipping_fields'])) {
+                $shipping_fields = isset($_POST['shipping_fields']) && is_array($_POST['shipping_fields']) ? wp_unslash($_POST['shipping_fields']) : []; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+                $new_config['shipping_fields'] = $this->sanitize_field_group($shipping_fields);
+            }
+
+            // Process order fields
+            if (isset($_POST['order_fields'])) {
+                $order_fields = isset($_POST['order_fields']) && is_array($_POST['order_fields']) ? wp_unslash($_POST['order_fields']) : []; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+                $new_config['order_fields'] = $this->sanitize_field_group($order_fields);
+            }
         }
 
         // Save section enabled states - only update the one being submitted

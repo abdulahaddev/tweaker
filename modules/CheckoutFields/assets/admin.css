@@ -1,78 +1,11 @@
 /**
  * CheckoutFields Module - Admin Styles
- * Uses WordPress native wp-list-table styling
+ * Module-specific styles only. Common styles are in tweaker-admin.css
  */
-
-/* Table input fields */
-.wp-list-table input[type="text"] {
-    width: 100%;
-    box-sizing: border-box;
-}
-
-/* Compact table padding */
-.wp-list-table td {
-    padding: 12px 10px;
-    vertical-align: middle;
-}
-
-/* Save Button */
-.nt-form .submit {
-    margin-top: 20px;
-    padding-top: 15px;
-    border-top: 1px solid #dcdcde;
-}
 
 /* WooCommerce Checkout - Inline Errors */
 .woocommerce-invalid input,
 .woocommerce-invalid select,
 .woocommerce-invalid textarea {
     border-color: #d63638 !important;
-}
-
-.nt-field-error {
-    color: #d63638;
-    font-size: 12px;
-    display: block;
-    margin-top: 4px;
-    font-weight: 500;
-}
-
-/* Toggle Status Labels */
-.nt-status-active {
-    color: green;
-    margin-left: 10px;
-}
-
-.nt-status-inactive {
-    color: #999;
-    margin-left: 10px;
-}
-
-/* Disabled Section Container */
-.nt-disabled {
-    opacity: 0.5;
-    pointer-events: none;
-    filter: grayscale(100%);
-    transition: all 0.3s ease;
-}
-
-/* Disabled Individual Field Row */
-.nt-field-disabled {
-    opacity: 0.5;
-    filter: grayscale(100%);
-    transition: all 0.3s ease;
-}
-
-/* Keep the enabled toggle clickable in disabled rows */
-.nt-field-disabled td:last-child {
-    opacity: 1;
-    filter: none;
-}
-
-/* Prevent interaction with disabled fields but allow toggle */
-.nt-field-disabled input:not([name*="[enabled]"]),
-.nt-field-disabled select,
-.nt-field-disabled textarea {
-    pointer-events: none;
-    cursor: not-allowed;
 }
